@@ -1,6 +1,7 @@
 import pygame as pg
 import sys
 import time
+from game import Game
 
 class Start:
 
@@ -85,8 +86,8 @@ class Start:
             pg.display.update()
             time.sleep(0.014)
         self.running = False
-        #start = Game(pokemon)
-        #start.run()
+        start = Game(pokemon)
+        start.run()
     def run(self):
         while self.running:
             self.draw()
