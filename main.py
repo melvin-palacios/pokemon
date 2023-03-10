@@ -29,7 +29,6 @@ class App:
         pg.display.update()
 
     def draw(self):
-        self.screen.fill(self.BG)
         self.screen.blit(self.bg_menu, (0, 0))
         self.screen.blit(self.pokemon, (self.W // 2 - 540, 20))
         self.screen.blit(self.font.render("Click anywhere to start", True, self.font_color), (self.W // 5 - 40, self.H // 2 + 150))
@@ -39,7 +38,7 @@ class App:
             self.fadeout.set_alpha(i)
             self.screen.blit(self.fadeout, (0, 0))
             pg.display.update()
-            pg.time.delay(4)
+            pg.time.delay(3)
     def run(self):
         while self.running:
             self.draw()

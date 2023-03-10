@@ -4,7 +4,6 @@ class Menu:
     def __init__(self):
         pg.init()
         pg.display.set_caption('Pokemon - Menu')
-        self.BG = (81, 216, 60)
         self.H = 800
         self.W = 1500
         self.bg_menu = pg.image.load('img/bg_pokemon.png')
@@ -37,7 +36,7 @@ class Menu:
 
     def fade_in(self):
         i = 0
-        while i > 0:
+        while i < 255:
             self.fadeout.set_alpha(255 - i)
             self.screen.blit(self.fadeout, (0, 0))
             pg.display.update()
@@ -53,9 +52,6 @@ class Menu:
             i += 5
             pg.time.delay(14)
     def run(self):
-        self.draw()
-        self.update()
-        self.fade_in()
         while self.running:
             self.draw()
             self.update()
