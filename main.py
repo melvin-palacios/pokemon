@@ -1,6 +1,5 @@
 import sys
 import pygame as pg
-import time
 from menu import Menu
 
 

@@ -1,12 +1,16 @@
 import pygame as pg
 import random
+from pokemon import Pokemon
 
 class Game:
 
     def __init__(self, pokemon):
-        self.pokemon = pokemon
+        self.pokemon = Pokemon(pokemon)
+        self.pokemon_list = ["Salameche", "Bulbizarre", "Carapuce"]
+        self.pokemon_enemy = random.choice(self.pokemon_list)
+        self.pokemon_enemy = Pokemon(self.pokemon_enemy)
         pg.init()
-        pg.display.set_caption('Pokemon - game')
+        pg.display.set_caption('Pokemon - fight')
         self.BG = (81, 216, 60)
         self.H = 800
         self.W = 1500
@@ -36,11 +40,8 @@ class Game:
         self.fadeout = pg.Surface((self.W, self.H))
         self.fadeout = self.fadeout.convert()
         self.fadeout.fill((0, 0, 0))
-        self.pokemon_list = ["salameche", "bulbizarre", "carapuce"]
-        self.pokemon_enemy = random.choice(self.pokemon_list)
         self.pokemon_enemy_cor = (self.W // 2 + 230, self.H // 2 - 300)
         self.pokemon_cor = (self.W // 2 - 500, self.H // 2 - 50)
-        self.pokemon_res =(300, 300)
         self.fight_bar = pg.image.load('img/battle_bar.png')
         self.fight_bar = pg.transform.scale(self.fight_bar,(self.W,230))
         self.fight_menu = pg.image.load('img/battle_menu.png')
@@ -48,35 +49,12 @@ class Game:
         self.choice_menu = pg.image.load('img/choice.png')
         self.choice_menu = pg.transform.scale(self.choice_menu,(24,40))
         self.choice_menu_cor = (self.W // 2 + 150, self.H // 2 + 235)
-        self.salameche_1 = pg.image.load('img/pokemon/sala_back_1.png')
-        self.salameche_2 = pg.image.load('img/pokemon/sala_back_2.png')
-        self.salameche_3 = pg.image.load('img/pokemon/sala_back_3.png')
-        self.salameche_4 = pg.image.load('img/pokemon/sala_front.png')
-        self.bulbizarre_1 = pg.image.load('img/pokemon/bulbi_back_1.png')
-        self.bulbizarre_2 = pg.image.load('img/pokemon/bulbi_back_2.png')
-        self.bulbizarre_3 = pg.image.load('img/pokemon/bulbi_back_3.png')
-        self.bulbizarre_4 = pg.image.load('img/pokemon/bulbi_front.png')
-        self.carapuce_1 = pg.image.load('img/pokemon/cara_back_1.png')
-        self.carapuce_2 = pg.image.load('img/pokemon/cara_back_2.png')
-        self.carapuce_3 = pg.image.load('img/pokemon/cara_back_3.png')
-        self.carapuce_4 = pg.image.load('img/pokemon/cara_front.png')
-        self.salameche_1 = pg.transform.scale(self.salameche_1, self.pokemon_res)
-        self.salameche_2 = pg.transform.scale(self.salameche_2, self.pokemon_res)
-        self.salameche_3 = pg.transform.scale(self.salameche_3, (self.pokemon_res[0] + 50, self.pokemon_res[1] + 50))
-        self.salameche_4 = pg.transform.scale(self.salameche_4, (self.pokemon_res[0] - 50, self.pokemon_res[1] - 50))
-        self.bulbizarre_1 = pg.transform.scale(self.bulbizarre_1, self.pokemon_res)
-        self.bulbizarre_2 = pg.transform.scale(self.bulbizarre_2, self.pokemon_res)
-        self.bulbizarre_3 = pg.transform.scale(self.bulbizarre_3, self.pokemon_res)
-        self.bulbizarre_4 = pg.transform.scale(self.bulbizarre_4, (self.pokemon_res[0] - 50, self.pokemon_res[1] - 50))
-        self.carapuce_1 = pg.transform.scale(self.carapuce_1, self.pokemon_res)
-        self.carapuce_2 = pg.transform.scale(self.carapuce_2, self.pokemon_res)
-        self.carapuce_3 = pg.transform.scale(self.carapuce_3, self.pokemon_res)
-        self.carapuce_4 = pg.transform.scale(self.carapuce_4, (self.pokemon_res[0] - 50, self.pokemon_res[1] - 50))
         self.chatbox = pg.image.load('img/chatbox.png')
         self.box_cor_1 = (self.W // 3, self.H // 6)
         self.chatbox = pg.transform.scale(self.chatbox, (self.W // 3.5, self.H // 7))
         self.chatbox_bg = pg.surface.Surface((self.W // 3.5 - 13, self.H // 7 - 8))
         self.chatbox_bg.fill((255, 255, 255))
+
 
 
 
@@ -91,45 +69,31 @@ class Game:
         self.screen.blit(self.fight_bar,(0,self.H - 230))
         self.screen.blit(self.fight_menu,(self.W - self.W//3 - 150,self.H - 230))
         self.screen.blit(self.font_big.render("What will", True, (255,255,255)), (self.W // 2 - 690, self.H // 2 + 230))
-        self.screen.blit(self.font_big.render(f"{self.pokemon} do ?", True, (255,255,255)), (self.W // 2 - 690, self.H // 2 + 290))
+        self.screen.blit(self.font_big.render(f"{self.pokemon.get_name()} do ?", True, (255,255,255)), (self.W // 2 - 690, self.H // 2 + 290))
         self.screen.blit(self.choice_menu, self.choice_menu_cor)
 
 
     def draw_pokemon(self):
-        for pokemon in self.pokemon_list:
-            self.screen.blit(self.chatbox_bg, (self.W // 2 + 100, self.H // 2 + 50))
-            self.screen.blit(self.chatbox, (self.W // 2 + 100 - 8, self.H // 2 + 50 - 6))
-            self.screen.blit(self.font.render(str(self.pokemon), True, self.font_color),
-                             (self.W // 2 + 110, self.H // 2 + 63))
-            self.screen.blit(self.font_small.render("PV:" + str(36) + "/" + str(36), True, self.font_color),
-                             (self.W // 2 + 113, self.H // 2 + 110))
-            self.screen.blit(self.font_small.render("LV:" + str(5), True, self.font_color),
-                             (self.W // 2 + 353, self.H // 2 + 110))
-            if pokemon == self.pokemon:
-                if pokemon == "salameche":
-                    self.screen.blit(self.salameche_1, self.pokemon_cor)
-                elif pokemon == "bulbizarre":
-                    self.screen.blit(self.bulbizarre_1, self.pokemon_cor)
-                elif pokemon == "carapuce":
-                    self.screen.blit(self.carapuce_1, self.pokemon_cor)
+        self.screen.blit(self.chatbox_bg, (self.W // 2 + 100, self.H // 2 + 50))
+        self.screen.blit(self.chatbox, (self.W // 2 + 100 - 8, self.H // 2 + 50 - 6))
+        self.screen.blit(self.font.render(str(self.pokemon_enemy.get_name()), True, self.font_color),
+                         (self.W // 2 + 110, self.H // 2 + 63))
+        self.screen.blit(self.font_small.render("PV:" + str(self.pokemon_enemy.get_pv()) + "/" + str(self.pokemon_enemy.get_pv_max()), True, self.font_color),
+                         (self.W // 2 + 113, self.H // 2 + 110))
+        self.screen.blit(self.font_small.render("LV:" + str(self.pokemon_enemy.level), True, self.font_color),
+                         (self.W // 2 + 353, self.H // 2 + 110))
+        self.screen.blit((self.pokemon.get_pokemon_image_back()),self.pokemon_cor)
 
     def draw_pokemon_enemy(self):
-        for pokemon in self.pokemon_list:
-            self.screen.blit(self.chatbox_bg, (self.W // 2 - 460, self.H // 2 - 250))
-            self.screen.blit(self.chatbox, (self.W // 2 - 460 - 8, self.H // 2 - 250 - 6))
-            self.screen.blit(self.font.render(str(self.pokemon_enemy), True, self.font_color),
-                             (self.W // 2 - 450, self.H // 2 - 237))
-            self.screen.blit(self.font_small.render("PV:" + str(36) + "/" + str(36), True, self.font_color),
-                             (self.W // 2 - 447, self.H // 2 - 190))
-            self.screen.blit(self.font_small.render("LV:" + str(8), True, self.font_color),
-                             (self.W // 2 - 210, self.H // 2 - 190))
-            if pokemon == self.pokemon_enemy:
-                if pokemon == "salameche":
-                    self.screen.blit(self.salameche_4, self.pokemon_enemy_cor)
-                elif pokemon == "bulbizarre":
-                    self.screen.blit(self.bulbizarre_4, self.pokemon_enemy_cor)
-                elif pokemon == "carapuce":
-                    self.screen.blit(self.carapuce_4, self.pokemon_enemy_cor)
+        self.screen.blit(self.chatbox_bg, (self.W // 2 - 460, self.H // 2 - 250))
+        self.screen.blit(self.chatbox, (self.W // 2 - 460 - 8, self.H // 2 - 250 - 6))
+        self.screen.blit(self.font.render(str(self.pokemon.get_name()), True, self.font_color),
+                         (self.W // 2 - 450, self.H // 2 - 237))
+        self.screen.blit(self.font_small.render("PV:" + str(self.pokemon.get_pv()) + "/" + str(self.pokemon.get_pv_max()), True, self.font_color),
+                         (self.W // 2 - 447, self.H // 2 - 190))
+        self.screen.blit(self.font_small.render("LV:" + str(self.pokemon.level), True, self.font_color),
+                         (self.W // 2 - 210, self.H // 2 - 190))
+        self.screen.blit((self.pokemon_enemy.get_pokemon_image_front()), self.pokemon_enemy_cor)
 
     def run(self):
         self.draw()
@@ -140,6 +104,3 @@ class Game:
             for event in pg.event.get():
                 if event.type == pg.QUIT:
                     self.running = False
-
-game = Game("salameche")
-game.run()

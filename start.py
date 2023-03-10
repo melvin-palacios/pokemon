@@ -26,19 +26,19 @@ class Start:
         self.chatbox_bg = pg.surface.Surface((self.H // 3 * 3.234 - 17, self.H // 3- 14))
         self.chatbox_bg.fill((255, 255, 255))
 
-        self.salameche_img = pg.image.load('img/pokemon/sala_front.png')
+        self.salameche_img = pg.image.load('img/pokemon/sala_front_1.png')
         self.salameche_img = pg.transform.scale(self.salameche_img, (self.H // 4, self.H // 4))
         self.salameche_rect = self.salameche_img.get_rect()
         self.salameche_rect.x = self.W // 2 - 100
         self.salameche_rect.y = self.H // 2 - 150
 
-        self.carapuce_img = pg.image.load('img/pokemon/cara_front.png')
+        self.carapuce_img = pg.image.load('img/pokemon/cara_front_1.png')
         self.carapuce_img = pg.transform.scale(self.carapuce_img, (self.H // 4, self.H // 4))
         self.carapuce_rect = self.carapuce_img.get_rect()
         self.carapuce_rect.x = self.W // 2 - 400
         self.carapuce_rect.y = self.H // 2 - 150
 
-        self.bulbizarre_img = pg.image.load('img/pokemon/bulbi_front.png')
+        self.bulbizarre_img = pg.image.load('img/pokemon/bulbi_front_1.png')
         self.bulbizarre_img = pg.transform.scale(self.bulbizarre_img, (self.H // 4, self.H // 4))
         self.bulbizarre_rect = self.bulbizarre_img.get_rect()
         self.bulbizarre_rect.x = self.W // 2 + 200
@@ -99,8 +99,8 @@ class Start:
                     sys.exit()
                 if event.type == pg.MOUSEBUTTONDOWN:
                     if self.salameche_rect.collidepoint(event.pos):
-                        self.start("salameche")
+                        self.start("Salameche")
                     if self.carapuce_rect.collidepoint(event.pos):
-                        self.start("carapuce")
+                        self.start("Carapuce")
                     if self.bulbizarre_rect.collidepoint(event.pos):
-                        self.start("bulbizarre")
+                        self.start("Bulbizarre")
