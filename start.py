@@ -1,6 +1,5 @@
 import pygame as pg
 import sys
-import time
 from game import Game
 
 class Start:
@@ -59,8 +58,17 @@ class Start:
         pass
 
     def update(self):
-        pass
+        pg.display.update()
 
+    def fade_in(self):
+        i = 255
+        while i > 0:
+            self.fade_surface.set_alpha(i)
+            self.screen.blit(self.fade_surface, (0, 0))
+            pg.display.update()
+            i -= 5
+            pg.time.delay(14)
+            self.draw()
     def draw(self):
         self.screen.fill(self.BG)
         self.screen.blit(self.decor, (0, 0))
@@ -75,7 +83,6 @@ class Start:
         self.screen.blit(self.carapuce_img, self.carapuce_rect)
         self.screen.blit(self.shadow, (self.bulbizarre_rect.x - 70, self.bulbizarre_rect.y + 155))
         self.screen.blit(self.bulbizarre_img, self.bulbizarre_rect)
-        pg.display.flip()
 
     def start(self, pokemon):
         i = 0
@@ -84,13 +91,16 @@ class Start:
             self.screen.blit(self.fade_surface, (0, 0))
             i += 5
             pg.display.update()
-            time.sleep(0.014)
+            pg.time.delay(8)
         self.running = False
         start = Game(pokemon)
         start.run()
+
     def run(self):
+        self.fade_in()
         while self.running:
             self.draw()
+            self.update()
             self.clock.tick(60)
             for event in pg.event.get():
                 if event.type == pg.QUIT:

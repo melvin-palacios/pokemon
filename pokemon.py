@@ -10,6 +10,9 @@ class Pokemon:
             self.__pv_max = data[nom]["pv"]
             self.__pv = data[nom]["pv"]
             self.attacks = data[nom]["attack"]
+            self.attack_1 = data[nom]["moves"][0]["name"]
+            self.attack_2 = data[nom]["moves"][1]["name"]
+            self.defense = data[nom]["defense"]
             self.level = data[nom]["level"]
             self.type = data[nom]["type"]
             self.evolution = data[nom]["evolution"]
@@ -29,7 +32,12 @@ class Pokemon:
 
     def get_pokemon_image_front(self):
         return self.image_front
-
     def get_pokemon_image_back(self):
         return self.image_back
+
+    def get_attack_1(self):
+        return self.attack_1
+
+    def get_attack_2(self):
+        return self.attack_2
 

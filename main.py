@@ -37,7 +37,7 @@ class App:
             self.fadeout.set_alpha(i)
             self.screen.blit(self.fadeout, (0, 0))
             pg.display.update()
-            pg.time.delay(3)
+            pg.time.delay(1)
     def run(self):
         while self.running:
             self.draw()

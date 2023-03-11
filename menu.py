@@ -20,7 +20,6 @@ class Menu:
         self.nouvelle_partie_rect = pg.Rect(self.W // 2 - 290, self.H // 2 + 70, 580, 40)
         self.exit_rect = pg.Rect(self.W // 2 - 80, self.H // 2 + 210, 160, 40)
         self.fadeout = pg.Surface((self.W, self.H))
-        self.fadeout = self.fadeout.convert()
         self.fadeout.fill((0, 0, 0))
         self.font_color = (90, 90, 90)
     def update(self):
@@ -35,13 +34,14 @@ class Menu:
         self.screen.blit(self.font.render("Exit", True, self.font_color), (self.W // 2 - 80, self.H // 2 + 210))
 
     def fade_in(self):
-        i = 0
-        while i < 255:
-            self.fadeout.set_alpha(255 - i)
+        i = 255
+        while i > 0:
+            self.fadeout.set_alpha(i)
             self.screen.blit(self.fadeout, (0, 0))
             pg.display.update()
-            i += 5
-            pg.time.delay(14)
+            i -= 5
+            pg.time.delay(8)
+            self.draw()
 
     def fade_out(self):
         i = 0
@@ -50,8 +50,9 @@ class Menu:
             self.screen.blit(self.fadeout, (0, 0))
             pg.display.update()
             i += 5
-            pg.time.delay(14)
+            pg.time.delay(8)
     def run(self):
+        self.fade_in()
         while self.running:
             self.draw()
             self.update()

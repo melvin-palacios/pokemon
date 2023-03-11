@@ -5,12 +5,12 @@ from pokemon import Pokemon
 class Game:
 
     def __init__(self, pokemon):
+        pg.init()
+        pg.display.set_caption('Pokemon - fight')
         self.pokemon = Pokemon(pokemon)
         self.pokemon_list = ["Salameche", "Bulbizarre", "Carapuce"]
         self.pokemon_enemy = random.choice(self.pokemon_list)
         self.pokemon_enemy = Pokemon(self.pokemon_enemy)
-        pg.init()
-        pg.display.set_caption('Pokemon - fight')
         self.BG = (81, 216, 60)
         self.H = 800
         self.W = 1500
@@ -55,12 +55,18 @@ class Game:
         self.chatbox_bg = pg.surface.Surface((self.W // 3.5 - 13, self.H // 7 - 8))
         self.chatbox_bg.fill((255, 255, 255))
 
-
-
-
     def update(self):
         pg.display.update()
 
+    def fade_in(self):
+        i = 255
+        while i > 0:
+            self.fadeout.set_alpha(i)
+            self.screen.blit(self.fadeout, (0, 0))
+            pg.display.update()
+            i -= 5
+            pg.time.delay(8)
+            self.draw()
     def draw(self):
         self.screen.fill(self.BG)
         self.screen.blit(self.bg_choice, (0, 0))
@@ -96,8 +102,7 @@ class Game:
         self.screen.blit((self.pokemon_enemy.get_pokemon_image_front()), self.pokemon_enemy_cor)
 
     def run(self):
-        self.draw()
-        self.update()
+        self.fade_in()
         while self.running:
             self.draw()
             self.update()
