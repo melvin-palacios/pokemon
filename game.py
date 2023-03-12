@@ -208,5 +208,3 @@ class Game:
                             self.attack_animation(self.pokemon)
                         elif self.choice_menu_cor == self.choice_attack_2_cor:
                             self.attack_animation(self.pokemon)
-game = Game("Bulbizarre")
-game.run()
