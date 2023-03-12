@@ -1,5 +1,6 @@
 import pygame as pg
 import json
+import random
 class Pokemon:
     def __init__(self, nom):
 
@@ -7,9 +8,9 @@ class Pokemon:
             data = json.load(f)
 
             self.__nom = data[nom]["name"]
-            self.__pv_max = data[nom]["pv"]
-            self.__pv = data[nom]["pv"]
-            self.attacks = data[nom]["attack"]
+            self.__pv_max = int(data[nom]["pv"])
+            self.__pv = int(data[nom]["pv"])
+            self.attacks = int(data[nom]["attack"])
             self.attack_1 = data[nom]["moves"][0]["name"]
             self.attack_2 = data[nom]["moves"][1]["name"]
             self.defense = data[nom]["defense"]
@@ -23,6 +24,9 @@ class Pokemon:
             self.image_back = pg.transform.scale(self.image_back, self.pokemon_res)
     def get_name(self):
         return self.__nom
+
+    def get_attacks(self):
+        return self.attacks
 
     def get_pv(self):
         return self.__pv
@@ -41,6 +45,8 @@ class Pokemon:
     def get_attack_2(self):
         return self.attack_2
 
-    def get_damage(self, attack):
-        self.__pv -= attack
+    def get_random_attack(self):
+        return random.choice([self.get_attack_1(), self.get_attack_2()])
 
+    def get_damage(self, attack):
+        self.__pv -= int(attack)

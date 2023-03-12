@@ -1,32 +1,24 @@
 import random
+import json
+from pokemon import Pokemon
+import random
 class Combat():
     def __init__(self, pokemon1, pokemon2):
         self.pokemon1 = pokemon1
         self.pokemon2 = pokemon2
-        self.pokemon1_turn = True
-        self.pokemon2_turn = False
-        self.POKEMON_TYPES = {
-            'Normal': ['Combat'],
-            'Combat': ['Vol', 'Poison', 'Insecte', 'Psy', 'Fee'],
-            'Vol': ['Combat', 'Insecte'],
-            'Poison': ['Sol', 'Psy'],
-            'Sol': ['Eau', 'Plante', 'Glace'],
-            'Roche': ['Combat', 'Sol', 'Eau', 'Plante', 'Normal'],
-            'Insecte': ['Vol', 'Roche', 'Feu'],
-            'Spectre': ['Spectre', 'Psy'],
-            'Acier': ['Combat', 'Feu', 'Sol'],
-            'Feu': ['Roche', 'Sol', 'Eau'],
-            'Eau': ['Electrique', 'Herbe'],
-            'Plante': ['Insecte', 'Sol', 'Eau'],
-            'Electrique': ['Sol'],
-            'Psy': ['Spectre', 'Combat'],
-            'Glace': ['Combat', 'Feu', 'Roche', 'Acier']}
+
+        self.current_turn = self.pokemon1
+
+        with open('data/types.json', 'r') as f:
+            data = json.load(f)
+            self.pokemon_type = data
+
 
     def is_alive(self):
         if self.pokemon1.get_pv() > 0 and self.pokemon2.get_pv() > 0:
             return True
         else:
-            self.who_is_alive()
+            return False
 
     def who_is_alive(self):
         if self.pokemon1.get_pv() > 0:
@@ -35,26 +27,42 @@ class Combat():
             return self.pokemon2
 
     def is_miss(self):
-        miss = random.randint(0, 1)
+        miss = random.randint(0, 4)
         if miss == 0:
             return True
         else:
             return False
 
-    def calculate_damage(self, pokemon1, pokemon2):
-        if self.pokemon1_turn:
-            if self.is_miss():
-                if pokemon1.get_attack_1() in self.POKEMON_TYPES[pokemon2.type]:
-                    pokemon2.get_damage(pokemon1.attacks[0] * 2)
-                    return True
+    def calculate_damage(self, pokemon1, pokemon2, attack):
+        if self.is_miss():
+            return 0
+        if pokemon1 == self.pokemon1:
+            if attack == "Charge" or attack == "Griffe":
+                efficacite = self.pokemon_type['normal'][pokemon2.type]
             else:
-                return False
+                efficacite = self.pokemon_type[pokemon1.type][pokemon2.type]
+            lvl_coef = (2 * self.pokemon1.level + 10) / 250
+            attack_coef = self.pokemon1.get_attacks() / self.pokemon2.defense
+            attack = self.pokemon1.get_attacks()
+            damage = int((lvl_coef * attack * attack_coef + 2) * efficacite)
+            self.current_turn = self.pokemon2
+            print(damage)
+            return damage
         else:
-            if self.is_miss():
-                pokemon1.get_damage(pokemon2.attacks)
-                return True
+            if attack == "Charge" or attack == "Griffe":
+                efficacite = self.pokemon_type['normal'][pokemon1.type]
             else:
-                return False
+                efficacite = self.pokemon_type[pokemon2.type][pokemon1.type]
+            lvl_coef = (2 * self.pokemon2.level + 10) / 100
+            attack_coef = self.pokemon2.get_attacks() / self.pokemon1.defense
+            attack = self.pokemon2.get_attacks()
+            damage = int((lvl_coef * attack * attack_coef + 2) * efficacite)
+            self.current_turn = self.pokemon1
+            print(damage)
+            return damage
+
+
+
 
 
 

@@ -1,6 +1,8 @@
 import pygame as pg
 import random
+import json
 from pokemon import Pokemon
+from combat import Combat
 
 class Game:
 
@@ -65,6 +67,7 @@ class Game:
         self.chatbox_bg.fill((255, 255, 255))
         self.is_fight_menu = False
         self.is_choice_menu = True
+        self.combat = Combat(self.pokemon, self.pokemon_enemy)
     def update(self):
         pg.display.update()
 
@@ -99,7 +102,7 @@ class Game:
         self.screen.blit(self.font_big.render("15", True, (30, 30, 30)),(self.W - 250,self.H - 170))
         self.screen.blit(self.font_big.render("15", True, (30, 30, 30)), (self.W - 130, self.H - 170))
         if self.choice_menu_cor == self.choice_attack_1_cor:
-            if self.pokemon.get_attack_1() != "Charge"and self.pokemon.get_attack_2() != "Griffe":
+            if self.pokemon.get_attack_1() != "Charge" and self.pokemon.get_attack_1() != "Griffe":
                 self.screen.blit(self.font_medium.render(self.pokemon.type, True, (54, 54, 53)), (self.W - 290, self.H - 85))
             else:
                 self.screen.blit(self.font_medium.render("Normal", True, (54, 54, 53)), (self.W - 290, self.H - 85))
@@ -133,26 +136,59 @@ class Game:
                          (self.W // 2 - 210, self.H // 2 - 190))
         self.screen.blit((self.pokemon_enemy.get_pokemon_image_front()), self.pokemon_enemy_cor)
 
-    def attack_animation(self, joueur):
-        if joueur == self.pokemon:
-            for i in range(0, 40):
-                if i < 20:
-                    self.pokemon_cor = (self.pokemon_cor[0] + 10, self.pokemon_cor[1])
+    def fade_out(self):
+        i = 0
+        while i < 255:
+            self.fadeout.set_alpha(i)
+            self.screen.blit(self.fadeout, (0, 0))
+            pg.display.update()
+            i += 5
+            pg.time.delay(8)
+
+
+    def attack_animation(self, joueur , attaque):
+        if self.combat.current_turn == self.pokemon:
+            for i in range(0, 50):
+                if i == 25:
+                    self.pokemon_enemy.get_damage(self.combat.calculate_damage(joueur, self.pokemon_enemy, attaque))
+                    for i in range(0,20):
+                        if i < 10:
+                            self.pokemon_enemy_cor = (self.pokemon_enemy_cor[0] + 5, self.pokemon_enemy_cor[1])
+                        else:
+                            self.pokemon_enemy_cor = (self.pokemon_enemy_cor[0] - 5, self.pokemon_enemy_cor[1])
+                        self.screen.blit(self.pokemon.get_pokemon_image_back(), self.pokemon_cor)
+                        self.draw()
+                        pg.time.delay(3)
+                if i < 24:
+                    self.pokemon_cor = (self.pokemon_cor[0] + 5, self.pokemon_cor[1])
                 else:
-                    self.pokemon_cor = (self.pokemon_cor[0] - 10, self.pokemon_cor[1])
+                    self.pokemon_cor = (self.pokemon_cor[0] - 5, self.pokemon_cor[1])
                 self.screen.blit(self.pokemon.get_pokemon_image_back(), self.pokemon_cor)
                 self.draw()
-                self.update()
-                pg.time.delay(2)
-        elif joueur == self.pokemon_enemy:
-            for i in range(0, 40):
-                if i < 20:
-                    self.pokemon_enemy_cor = (self.pokemon_enemy_cor[0] - 10, self.pokemon_enemy_cor[1])
+                i += 5
+                pg.time.delay(3)
+        self.combat.current_turn = self.pokemon_enemy
+        if self.combat.current_turn == self.pokemon_enemy:
+            pg.time.delay(1000)
+            for i in range(0, 50):
+                if i == 25:
+                    self.pokemon.get_damage(self.combat.calculate_damage(self.pokemon_enemy, self.pokemon, self.pokemon_enemy.get_attack_1()))
+                    for i in range(0,20):
+                        if i < 10:
+                            self.pokemon_cor = (self.pokemon_cor[0] - 5, self.pokemon_cor[1])
+                        else:
+                            self.pokemon_cor = (self.pokemon_cor[0] + 5, self.pokemon_cor[1])
+                        self.screen.blit(self.pokemon_enemy.get_pokemon_image_front(), self.pokemon_enemy_cor)
+                        self.draw()
+                        pg.time.delay(3)
+                if i < 24:
+                    self.pokemon_enemy_cor = (self.pokemon_enemy_cor[0] - 5, self.pokemon_enemy_cor[1])
                 else:
-                    self.pokemon_enemy_cor = (self.pokemon_enemy_cor[0] + 10, self.pokemon_enemy_cor[1])
+                    self.pokemon_enemy_cor = (self.pokemon_enemy_cor[0] + 5, self.pokemon_enemy_cor[1])
+                self.screen.blit(self.pokemon_enemy.get_pokemon_image_front(), self.pokemon_enemy_cor)
                 self.draw()
-                self.update()
-                pg.time.delay(2)
+                i += 5
+                pg.time.delay(3)
 
     def run(self):
         self.fade_in()
@@ -162,6 +198,23 @@ class Game:
             else:
                 self.draw()
             self.update()
+            if self.combat.is_alive() == False:
+                if self.combat.who_is_alive() == self.pokemon:
+                    self.screen.blit(self.font_big.render("Vous avez gagné", True, (20, 200, 20)),
+                                     (self.W // 2 - 100, self.H // 2 - 100))
+                    pg.display.update()
+                    with open("data/pokemon.json", "w") as f:
+                        data = json.load(f)
+                        data[self.pokemon.get_name()]["level"] = self.pokemon.level
+                        data[self.pokemon_enemy.get_name()]["discovered"] = True
+                        json.dump(data, f)
+                else:
+                    self.screen.blit(self.font_big.render("Vous avez perdu", True, (200, 20, 20)),
+                                 (self.W // 2 - 100, self.H // 2 - 100))
+                    pg.display.update()
+                    pg.time.delay(3000)
+                    self.fade_out()
+                    self.running = False
             for event in pg.event.get():
                 if event.type == pg.QUIT:
                     self.running = False
@@ -203,8 +256,11 @@ class Game:
                         elif self.choice_menu_cor == self.choice3_cor:
                             print("pokemon")
                         elif self.choice_menu_cor == self.choice4_cor:
-                            print("run")
+                            if self.combat.is_miss():
+                                self.attack_animation(self.pokemon_enemy, self.pokemon_enemy.get_attack_1())
+                            else:
+                                print("fuite")
                         elif self.choice_menu_cor == self.choice_attack_1_cor:
-                            self.attack_animation(self.pokemon)
+                            self.attack_animation(self.pokemon, self.pokemon.get_attack_1())
                         elif self.choice_menu_cor == self.choice_attack_2_cor:
-                            self.attack_animation(self.pokemon)
+                            self.attack_animation(self.pokemon, self.pokemon.get_attack_2())
