@@ -35,6 +35,7 @@ class Game:
         self.running = True
         self.font = pg.font.Font("font/font.ttf", 30)
         self.font_big = pg.font.Font("font/font.ttf", 44)
+        self.font_medium = pg.font.Font("font/font.ttf", 38)
         self.font_small = pg.font.Font("font/font.ttf", 24)
         self.font_color = (0, 0, 0)
         self.fadeout = pg.Surface((self.W, self.H))
@@ -48,13 +49,22 @@ class Game:
         self.fight_menu = pg.transform.scale(self.fight_menu,(self.W // 3 + 150,230))
         self.choice_menu = pg.image.load('img/choice.png')
         self.choice_menu = pg.transform.scale(self.choice_menu,(24,40))
-        self.choice_menu_cor = (self.W // 2 + 150, self.H // 2 + 235)
+        self.attack_bar = pg.image.load('img/attack_bar.png')
+        self.attack_bar = pg.transform.scale(self.attack_bar,(self.W,230))
+        self.choice1_cor = (self.W // 2 + 150, self.H // 2 + 235)
+        self.choice2_cor = (self.W // 2 + 450, self.H // 2 + 235)
+        self.choice3_cor = (self.W // 2 + 150, self.H // 2 + 310)
+        self.choice4_cor = (self.W // 2 + 450, self.H // 2 + 310)
+        self.choice_attack_1_cor = (self.W * 0.08 - 35, self.H // 2 + 230)
+        self.choice_attack_2_cor = (self.W * 0.08 - 35, self.H // 2 + 300)
+        self.choice_menu_cor = self.choice1_cor
         self.chatbox = pg.image.load('img/chatbox.png')
         self.box_cor_1 = (self.W // 3, self.H // 6)
         self.chatbox = pg.transform.scale(self.chatbox, (self.W // 3.5, self.H // 7))
         self.chatbox_bg = pg.surface.Surface((self.W // 3.5 - 13, self.H // 7 - 8))
         self.chatbox_bg.fill((255, 255, 255))
-
+        self.is_fight_menu = False
+        self.is_choice_menu = True
     def update(self):
         pg.display.update()
 
@@ -74,9 +84,31 @@ class Game:
         self.draw_pokemon_enemy()
         self.screen.blit(self.fight_bar,(0,self.H - 230))
         self.screen.blit(self.fight_menu,(self.W - self.W//3 - 150,self.H - 230))
-        self.screen.blit(self.font_big.render("What will", True, (255,255,255)), (self.W // 2 - 690, self.H // 2 + 230))
-        self.screen.blit(self.font_big.render(f"{self.pokemon.get_name()} do ?", True, (255,255,255)), (self.W // 2 - 690, self.H // 2 + 290))
+        if self.is_fight_menu:
+            self.draw_fight_menu()
+        else:
+            self.screen.blit(self.font_big.render("What will", True, (255,255,255)), (self.W // 2 - 690, self.H // 2 + 230))
+            self.screen.blit(self.font_big.render(f"{self.pokemon.get_name()} do ?", True, (255,255,255)), (self.W // 2 - 690, self.H // 2 + 290))
+            self.screen.blit(self.choice_menu, self.choice_menu_cor)
+
+    def draw_fight_menu(self):
+        self.screen.blit(self.attack_bar,(0,self.H - 230))
         self.screen.blit(self.choice_menu, self.choice_menu_cor)
+        self.screen.blit(self.font_big.render(self.pokemon.get_attack_1(), True, (54, 54, 53)),(self.W * 0.08,self.H - 170))
+        self.screen.blit(self.font_big.render(self.pokemon.get_attack_2(), True, (54, 54, 53)),(self.W * 0.08,self.H - 100))
+        self.screen.blit(self.font_big.render("15", True, (30, 30, 30)),(self.W - 250,self.H - 170))
+        self.screen.blit(self.font_big.render("15", True, (30, 30, 30)), (self.W - 130, self.H - 170))
+        if self.choice_menu_cor == self.choice_attack_1_cor:
+            if self.pokemon.get_attack_1() != "Charge"and self.pokemon.get_attack_2() != "Griffe":
+                self.screen.blit(self.font_medium.render(self.pokemon.type, True, (54, 54, 53)), (self.W - 290, self.H - 85))
+            else:
+                self.screen.blit(self.font_medium.render("Normal", True, (54, 54, 53)), (self.W - 290, self.H - 85))
+        elif self.choice_menu_cor == self.choice_attack_2_cor:
+            if self.pokemon.get_attack_2() != "Charge" and self.pokemon.get_attack_2() != "Griffe":
+                self.screen.blit(self.font_medium.render(self.pokemon.type, True, (54, 54, 53)), (self.W - 290, self.H - 85))
+            else:
+                self.screen.blit(self.font_medium.render("Normal", True, (54, 54, 53)), (self.W - 290, self.H - 85))
+        self.update()
 
 
     def draw_pokemon(self):
@@ -101,11 +133,80 @@ class Game:
                          (self.W // 2 - 210, self.H // 2 - 190))
         self.screen.blit((self.pokemon_enemy.get_pokemon_image_front()), self.pokemon_enemy_cor)
 
+    def attack_animation(self, joueur):
+        if joueur == self.pokemon:
+            for i in range(0, 40):
+                if i < 20:
+                    self.pokemon_cor = (self.pokemon_cor[0] + 10, self.pokemon_cor[1])
+                else:
+                    self.pokemon_cor = (self.pokemon_cor[0] - 10, self.pokemon_cor[1])
+                self.screen.blit(self.pokemon.get_pokemon_image_back(), self.pokemon_cor)
+                self.draw()
+                self.update()
+                pg.time.delay(2)
+        elif joueur == self.pokemon_enemy:
+            for i in range(0, 40):
+                if i < 20:
+                    self.pokemon_enemy_cor = (self.pokemon_enemy_cor[0] - 10, self.pokemon_enemy_cor[1])
+                else:
+                    self.pokemon_enemy_cor = (self.pokemon_enemy_cor[0] + 10, self.pokemon_enemy_cor[1])
+                self.draw()
+                self.update()
+                pg.time.delay(2)
+
     def run(self):
         self.fade_in()
         while self.running:
-            self.draw()
+            if self.is_fight_menu:
+                self.draw_fight_menu()
+            else:
+                self.draw()
             self.update()
             for event in pg.event.get():
                 if event.type == pg.QUIT:
                     self.running = False
+                if event.type == pg.KEYDOWN:
+                    if event.key == pg.K_ESCAPE:
+                        self.is_fight_menu = False
+                        self.choice_menu_cor = self.choice1_cor
+                    if event.key == pg.K_LEFT:
+                        if self.choice_menu_cor == self.choice2_cor:
+                            self.choice_menu_cor = self.choice1_cor
+                        elif self.choice_menu_cor == self.choice4_cor:
+                            self.choice_menu_cor = self.choice3_cor
+
+                    if event.key == pg.K_RIGHT:
+                        if self.choice_menu_cor == self.choice1_cor:
+                            self.choice_menu_cor = self.choice2_cor
+                        elif self.choice_menu_cor == self.choice3_cor:
+                            self.choice_menu_cor = self.choice4_cor
+                    if event.key == pg.K_UP:
+                        if self.choice_menu_cor == self.choice3_cor:
+                            self.choice_menu_cor = self.choice1_cor
+                        elif self.choice_menu_cor == self.choice4_cor:
+                            self.choice_menu_cor = self.choice2_cor
+                        elif self.choice_menu_cor == self.choice_attack_2_cor:
+                            self.choice_menu_cor = self.choice_attack_1_cor
+                    if event.key == pg.K_DOWN:
+                        if self.choice_menu_cor == self.choice1_cor:
+                            self.choice_menu_cor = self.choice3_cor
+                        elif self.choice_menu_cor == self.choice2_cor:
+                            self.choice_menu_cor = self.choice4_cor
+                        elif self.choice_menu_cor == self.choice_attack_1_cor:
+                            self.choice_menu_cor = self.choice_attack_2_cor
+                    if event.key == pg.K_RETURN:
+                        if self.choice_menu_cor == self.choice1_cor:
+                            self.choice_menu_cor = self.choice_attack_1_cor
+                            self.is_fight_menu = True
+                        elif self.choice_menu_cor == self.choice2_cor:
+                            print("bag")
+                        elif self.choice_menu_cor == self.choice3_cor:
+                            print("pokemon")
+                        elif self.choice_menu_cor == self.choice4_cor:
+                            print("run")
+                        elif self.choice_menu_cor == self.choice_attack_1_cor:
+                            self.attack_animation(self.pokemon)
+                        elif self.choice_menu_cor == self.choice_attack_2_cor:
+                            self.attack_animation(self.pokemon)
+game = Game("Bulbizarre")
+game.run()

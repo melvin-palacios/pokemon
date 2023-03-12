@@ -41,3 +41,6 @@ class Pokemon:
     def get_attack_2(self):
         return self.attack_2
 
+    def get_damage(self, attack):
+        self.__pv -= attack
+
