@@ -1,0 +1,200 @@
+{
+  "Salameche": {
+    "name": "Salameche",
+    "attack": 52,
+    "defense": 43,
+    "pv": 39,
+    "type": "feu",
+    "evolution": {
+      "to": "Reptincel",
+      "level": 16
+    },
+    "front_img": "img/pokemon/sala_front_1.png",
+    "back_img": "img/pokemon/sala_back_1.png",
+    "moves": [
+      {
+        "name": "Griffe"
+      },
+      {
+        "name": "Flammeche"
+      }
+    ],
+    "level": 1,
+    "discovered": false
+  },
+  "Reptincel": {
+    "name": "Reptincel",
+    "attack": 64,
+    "defense": 58,
+    "pv": 58,
+    "type": "feu",
+    "evolution": {
+      "to": "Dracaufeu",
+      "level": 36
+    },
+    "front_img": "img/pokemon/sala_front_2.png",
+    "back_img": "img/pokemon/sala_back_2.png",
+    "moves": [
+      {
+        "name": "Tranch'Griffe"
+      },
+      {
+        "name": "Flammeche"
+      }
+    ],
+    "level": 1,
+    "discovered": false
+  },
+  "Dracaufeu": {
+    "name": "Dracaufeu",
+    "attack": 84,
+    "defense": 78,
+    "pv": 78,
+    "type": "feu",
+    "evolution": null,
+    "front_img": "img/pokemon/sala_front_3.png",
+    "back_img": "img/pokemon/sala_back_3.png",
+    "moves": [
+      {
+        "name": "Lance-Flammes"
+      },
+      {
+        "name": "Colere"
+      }
+    ],
+    "level": 1,
+    "discovered": false
+  },
+  "Bulbizarre": {
+    "name": "Bulbizarre",
+    "attack": 49,
+    "defense": 49,
+    "pv": 45,
+    "type": "plante",
+    "evolution": {
+      "to": "Herbizarre",
+      "level": 16
+    },
+    "front_img": "img/pokemon/bulbi_front_1.png",
+    "back_img": "img/pokemon/bulbi_back_1.png",
+    "moves": [
+      {
+        "name": "Charge"
+      },
+      {
+        "name": "Vive-Attaque"
+      }
+    ],
+    "level": 1,
+    "discovered": false
+  },
+  "Herbizarre": {
+    "name": "Herbizarre",
+    "attack": 62,
+    "defense": 63,
+    "pv": 60,
+    "type": "plante",
+    "evolution": {
+      "to": "Florizarre",
+      "level": 32
+    },
+    "front_img": "img/pokemon/bulbi_front_2.png",
+    "back_img": "img/pokemon/bulbi_back_2.png",
+    "moves": [
+      {
+        "name": "Racines"
+      },
+      {
+        "name": "Tranch'Herbe"
+      }
+    ],
+    "level": 1,
+    "discovered": false
+    },
+    "Florizarre": {
+      "name": "Florizarre",
+      "attack": 82,
+      "defense": 83,
+      "pv": 80,
+      "type": "plante",
+      "evolution": null,
+      "front_img": "img/pokemon/bulbi_front_3.png",
+      "back_img": "img/pokemon/bulbi_back_3.png",
+      "moves": [
+        {
+          "name": "Lame-Feuille"
+        },
+        {
+          "name": "Lance-Soleil"
+        }
+      ],
+      "level": 1,
+      "discovered": false
+    },
+    "Carapuce": {
+      "name": "Carapuce",
+      "attack": 48,
+      "defense": 65,
+      "pv": 44,
+      "type": "eau",
+      "evolution": {
+        "to": "Carabaffe",
+        "level": 16
+      },
+      "front_img": "img/pokemon/cara_front_1.png",
+      "back_img": "img/pokemon/cara_back_1.png",
+      "moves": [
+        {
+          "name": "Charge"
+        },
+        {
+          "name": "Bulles d'O"
+        }
+      ],
+      "level": 1,
+      "discovered": false
+    },
+    "Carabaffe": {
+      "name": "Carabaffe",
+      "attack": 63,
+      "defense": 80,
+      "pv": 59,
+      "type": "eau",
+      "evolution": {
+        "to": "Tortank",
+        "level": 36
+      },
+      "front_img": "img/pokemon/cara_front_2.png",
+      "back_img": "img/pokemon/cara_back_2.png",
+      "moves": [
+        {
+          "name": "Hydrocanon"
+        },
+        {
+          "name": "Bulles d'O"
+        }
+      ],
+      "level": 1,
+      "discovered": false
+    },
+    "Tortank": {
+      "name": "Tortank",
+      "attack": 83,
+      "defense": 100,
+      "pv": 79,
+      "type": "eau",
+      "evolution": null,
+      "front_img": "img/pokemon/cara_front_3.png",
+      "back_img": "img/pokemon/cara_back_3.png",
+      "moves": [
+        {
+          "name": "Hydrocanon"
+        },
+        {
+          "name": "Bulles d'O"
+        }
+      ],
+      "level": 1,
+      "discovered": false
+    }
+    }

@@ -207,7 +207,6 @@ class Game:
                         data = json.load(f)
                         data[self.pokemon.get_name()]["level"] = self.pokemon.level
                         data[self.pokemon_enemy.get_name()]["discovered"] = True
-                        json.dump(data, f)
                 else:
                     self.screen.blit(self.font_big.render("Vous avez perdu", True, (200, 20, 20)),
                                  (self.W // 2 - 100, self.H // 2 - 100))

@@ -1,6 +1,4 @@
-import random
 import json
-from pokemon import Pokemon
 import random
 class Combat():
     def __init__(self, pokemon1, pokemon2):
@@ -41,7 +39,7 @@ class Combat():
                 efficacite = self.pokemon_type['normal'][pokemon2.type]
             else:
                 efficacite = self.pokemon_type[pokemon1.type][pokemon2.type]
-            lvl_coef = (2 * self.pokemon1.level + 10) / 250
+            lvl_coef = 0.5
             attack_coef = self.pokemon1.get_attacks() / self.pokemon2.defense
             attack = self.pokemon1.get_attacks()
             damage = int((lvl_coef * attack * attack_coef + 2) * efficacite)
@@ -53,7 +51,7 @@ class Combat():
                 efficacite = self.pokemon_type['normal'][pokemon1.type]
             else:
                 efficacite = self.pokemon_type[pokemon2.type][pokemon1.type]
-            lvl_coef = (2 * self.pokemon2.level + 10) / 100
+            lvl_coef = 0.5
             attack_coef = self.pokemon2.get_attacks() / self.pokemon1.defense
             attack = self.pokemon2.get_attacks()
             damage = int((lvl_coef * attack * attack_coef + 2) * efficacite)

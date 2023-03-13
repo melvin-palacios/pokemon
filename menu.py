@@ -68,7 +68,10 @@ class Menu:
                         start = Start()
                         start.run()
                     if self.nouvelle_partie_rect.collidepoint(mouse):
-                        print("Nouvelle partie")
+                        self.fade_out()
+                        self.running = False
+                        start = Start()
+                        start.run()
                     if self.option_rect.collidepoint(mouse):
                         print("Option")
                     if self.exit_rect.collidepoint(mouse):
